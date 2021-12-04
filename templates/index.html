@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Automated Minutes of Meeting</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="WebRTC getUserMedia MediaRecorder API">
+
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href= "{{ url_for('static', path='/images/icons/favicon.ico') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/bootstrap/css/bootstrap.min.css') }}" >
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/fonts/iconic/css/material-design-iconic-font.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/animate/animate.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/css-hamburgers/hamburgers.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/animsition/css/animsition.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/select2/select2.min.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/vendor/daterangepicker/daterangepicker.css') }}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href= "{{ url_for('static', path='/css/main.css') }}">
+<!--===============================================================================================-->
+</head>
+<body>
+
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url({{url_for('static', path='/images/bg-01.jpg')}})">
+			<div class="wrap-login100 p-l-20 p-r-20 p-t-20 p-b-20">
+				<div id="msg" class="row warning p-l-20 p-r-20 p-t-10 p-b-10" style="display : none;">
+						Success : audio has started recording
+					<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+				</div>
+				{% if message %}
+				<div id="message" class="row warning p-l-20 p-r-20 p-t-10 p-b-10">
+						{{message}}
+					<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+				</div>
+				{% endif %}
+				<span class="login100-form-title p-b-20">
+						Automated M.O.M.
+				</span>
+				{% if resultSentimentText or resultSummaryText %}
+					<div class="txt1 success p-b-20">
+						  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+						  {% if resultSummaryText %}
+							  <div style=""><strong> Summary of meeting is: </strong></div>
+							  <div style=""><label id="resultSummaryText" name="Results" value=''>{{resultSummaryText}}</label></div>
+						  {% endif %}
+						  <br/>
+						  {% if resultSentimentText %}
+							  <div style=""><strong > Predicted Sentiment of this meeting is: </strong></div>
+							  <div style=""><label id="resultSentimentText" name="Results" value=''>{{resultSentimentText}}</label></div>
+						  {% endif %}
+					</div>
+				{% endif %}
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="container-login100-form-btn p-b-20">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button id="startRecording" class="login100-form-btn">
+									Start Recording
+								</button>
+							</div>
+						</div>
+						<div class="container-login100-form-btn p-b-20">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button class="login100-form-btn" id="stopRecording" disabled>
+									Stop Recording
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<form class="login100-form validate-form p-b-20" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+							<div style=""><strong > Please upload your recording </strong></div>
+							<div class="">
+								 <div>
+									<label for="file-upload">
+										<input type="file" id="file-upload" name="file">
+										<i class="fa fa-upload custom-file-upload buttonHover" aria-hidden="true"> Choose File</i>
+									</label>
+								</div>
+								<div class="container-login100-form-btn">
+									<div class="wrap-login100-form-btn">
+										<div class="login100-form-bgbtn"></div>
+										<button class="login100-form-btn" onclick="waitFunc()">
+											Upload your Recording
+										</button>
+									</div>
+								</div>
+							</div>
+			    		</form>
+					</div>
+				</div>
+				<div class="row">
+					<form class="login100-form validate-form  p-l-20 p-r-20 p-b-20" action="{{ url_for('processMOM') }}" method="POST" enctype="multipart/form-data">
+					  {% if enableProcessBtn == true %}
+						  <div class="container-login100-form-btn">
+								<div class="wrap-login100-form-btn">
+									<div class="login100-form-bgbtn"></div>
+									<button class="login100-form-btn" id="processMOM" onclick="waitFunc()">
+										Process the audio
+									</button>
+								</div>
+						  </div>
+						  <input id="fileLoc" name="fileLoc" style="display:none;" value="{{fileLoc}}"></input>
+					  {% endif %}
+					</form>
+				</div>
+				<div class="row login100-form-title p-l-20 p-r-20 p-b-20">
+					{% if resultFullText %}
+					<div class="txt1 success p-b-20">
+					  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+					  <div style=""><strong > Full text of this meeting is: </strong></div>
+					  <div style=""><label id="resultFullText" name="Results" value=''>{{resultFullText}}</label></div>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+<!--	<audio controls autoplay></audio>-->
+<!--	<input onclick="startRecording()" type="button" value="start recording" />-->
+<!--	<input onclick="stopRecording()" type="button" value="stop recording and play" />-->
+<!--    <div id='gUMArea'>-->
+<!--      <div>-->
+<!--      Record:-->
+<!--        <input type="radio" name="media" value="video" checked id='mediaVideo'>Video-->
+<!--        <input type="radio" name="media" value="audio">audio-->
+<!--      </div>-->
+<!--      <button class="btn btn-default"  id='gUMbtn'>Request Stream</button>-->
+<!--    </div>-->
+<!--    <div id='btns'>-->
+<!--      <button  class="btn btn-default" id='start'>Start</button>-->
+<!--      <button  class="btn btn-default" id='stop'>Stop</button>-->
+<!--    </div>-->
+
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/animsition/js/animsition.min.js') }}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/bootstrap/js/popper.js') }}"></script>
+	<script src="{{ url_for('static', path='/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/select2/select2.min.js') }}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/daterangepicker/moment.min.js') }}"></script>
+	<script src="{{ url_for('static', path='/vendor/daterangepicker/daterangepicker.js') }}"></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/vendor/countdowntime/countdowntime.js') }}" ></script>
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', path='/js/main.js') }}"></script>
+<!--	<script src="{{ url_for('static', path='/js/ss.js') }}"></script>-->
+<!--	<script src="{{ url_for('static', path='/js/recordWorker.js') }}"></script>-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+click==6.7
+Flask==0.12.2
+itsdangerous==0.24
+Jinja2==2.10
+Werkzeug==0.12.2
+pandas
+speech_recognition
+pydub
+pickle
+cv2
+librosa
+tensorflow
+transformers
+sounddevice
