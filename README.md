@@ -14,9 +14,9 @@ This project has three major parts :
 ### Running the project
 As the trained model is already saved in the repository , the model can be downladed in the location where you intend to run this code. After which you will need to do following things:
 
-1. Run app.py using below command to start Flask API (in Pycharm)
+1. Run main.py using below command to start FastAPI (in Pycharm)
 ```
-python app.py
+python main.py
 ```
 
 Make sure the DecisionModel.pkl, scale.pkl and CNNModel.h5 files are downloaded as well in the same repository
