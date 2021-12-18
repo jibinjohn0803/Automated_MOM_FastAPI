@@ -1,6 +1,6 @@
 # Automated Minutes of Meeting using AI
 
-This is a project to identify the sentiment of the recorded audio along with converting the audio into text and thereafter summarizing it.
+This is a project to create a summary text of an uploaded (recorded) audio and also capturing the emotion of the speaker and predicting the overall sentiment.
 
 ### Prerequisites
 You must have Scikit Learn, Pandas (for Machine Leraning Model) and FastAPI (for API) installed.
