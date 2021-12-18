@@ -7,8 +7,8 @@ You must have Scikit Learn, Pandas (for Machine Leraning Model) and FastAPI (for
 
 ### Project Structure
 This project has three major parts :
-1. Text_Summarization.ipynb - Under. ML Build folder, this python code is used to convert audio to text and thereafter generating summary of the same.
-2. app.py - This contains Flask APIs that receives crop details through GUI, computes the precited value based on our model and returns it.
+1. Text_Summarization.ipynb - Under ML Build folder, this python code is used to convert audio to text and thereafter generating summary of the same.
+2. MOM using AI.ipynb -  Under ML Build folder, this code showcases how the model was developed and saved which was finally used in main.py file.
 4. templates - This folder contains the HTML template to allow user to enter crop details (images as well) to predict ideal crop (or disease identification for images).
 
 ### Running the project
