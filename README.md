@@ -7,7 +7,7 @@ You must have Scikit Learn, Pandas (for Machine Leraning Model) and FastAPI (for
 
 ### Project Structure
 This project has three major parts :
-1. Maximize Crop Yield Using AI.ipynb - This contains code for development/training of Machine Learning models and saving it for further use.
+1. Text_Summarization.ipynb - Under. ML Build folder, this python code is used to convert audio to text and thereafter generating summary of the same.
 2. app.py - This contains Flask APIs that receives crop details through GUI, computes the precited value based on our model and returns it.
 4. templates - This folder contains the HTML template to allow user to enter crop details (images as well) to predict ideal crop (or disease identification for images).
 
