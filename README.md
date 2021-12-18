@@ -19,11 +19,11 @@ As the trained model is already saved in the repository , the model can be downl
 python main.py
 ```
 
-Make sure the DecisionModel.pkl, scale.pkl and CNNModel.h5 files are downloaded as well in the same repository
+Make sure the ModelCNN.h5, scale.pkl and MOM_App.py files are downloaded as well in the same repository
 
-By default, flask will run on port 5000.
+By default, fastapi will run on port 8000.
 
-3. Navigate to URL http://localhost:5000
+3. Navigate to URL http://localhost:8000
 
 You should be able to view the homepage, enter the details and see the results.
 
